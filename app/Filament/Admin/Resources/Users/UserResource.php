@@ -47,6 +47,11 @@ class UserResource extends Resource
         ];
     }
 
+    public static function canViewAny(): bool
+    {
+        return auth()->user()->hasRole('super-admin');
+    }
+
     public static function canCreate(): bool
     {
         return auth()->user()->hasRole('super-admin');
