@@ -29,6 +29,10 @@ COPY . .
 # ติดตั้ง PHP dependencies ด้วย Composer
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
+# ติดตั้ง Filament และ Livewire
+RUN composer require filament/filament
+RUN composer require livewire/livewire
+
 # เปิด port 8000 ที่ใช้โดย php artisan serve
 EXPOSE 8000
 
@@ -47,8 +51,6 @@ RUN php artisan filament:optimize
 
 # เคลียร์ cache ถ้าจำเป็น
 RUN php artisan filament:optimize-clear
-
-RUN php artisan vendor:publish --force --tag=livewire:assets
 
 # รัน migrations และเริ่ม server
 CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000

@@ -1,14 +1,9 @@
-import { defineConfig } from 'vite';
-import laravel from 'laravel-vite-plugin';
-
 export default defineConfig({
-    server: {
-        https: true, // ตั้งค่าให้ Vite รันผ่าน HTTPS ในการพัฒนา
-    },
-    plugins: [
-        laravel({
-            input: ['resources/css/app.css', 'resources/js/app.js'],
-            refresh: true,
-        }),
-    ],
+  base: process.env.ASSET_URL || '/',  // ใช้ค่า ASSET_URL ที่ถูกต้องใน production
+  plugins: [
+    laravel({
+      input: ['resources/css/app.css', 'resources/js/app.js'],
+      refresh: true,
+    }),
+  ],
 });
