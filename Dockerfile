@@ -46,6 +46,9 @@ RUN npm install
 # Build assets ด้วย Vite
 RUN npm run build
 
+# สร้าง symbolic link สำหรับการให้บริการไฟล์ใน public/storage
+RUN php artisan storage:link
+
 # รันคำสั่ง Filament optimize เพื่อเพิ่มประสิทธิภาพ
 RUN php artisan filament:optimize
 
