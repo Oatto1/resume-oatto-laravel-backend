@@ -14,6 +14,7 @@ RUN apt-get update && apt-get install -y \
     libxml2-dev \
     libicu-dev \
     libzip-dev \
+    nginx \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mbstring gd intl zip
 
@@ -28,9 +29,6 @@ COPY . .
 
 # ติดตั้ง PHP dependencies ด้วย Composer
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
-
-# เปิด port 8000 ที่ใช้โดย php artisan serve
-EXPOSE 8000
 
 # ติดตั้ง Node.js และ npm
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
@@ -48,5 +46,11 @@ RUN php artisan filament:optimize
 # เคลียร์ cache ถ้าจำเป็น
 RUN php artisan filament:optimize-clear
 
-# รัน migrations และเริ่ม server
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+# ตั้งค่า Nginx หรือ Apache ให้รองรับไฟล์ static assets และ route ของ Livewire
+COPY ./nginx.conf /etc/nginx/sites-available/default
+
+# เปิด port 80 และ 443 สำหรับ Nginx
+EXPOSE 80 443
+
+# รัน migrations และเริ่ม Nginx และ PHP-FPM
+CMD service nginx start && php-fpm
