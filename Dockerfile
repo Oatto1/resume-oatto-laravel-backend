@@ -1,8 +1,9 @@
-FROM php:8.4-cli
+FROM php:8.4-fpm
 
+# กำหนด working directory
 WORKDIR /var/www/html
 
-# install system deps
+# ติดตั้ง dependencies ที่จำเป็น
 RUN apt-get update && apt-get install -y \
     git unzip libpng-dev libjpeg-dev libfreetype6-dev \
     libonig-dev libxml2-dev zip curl libicu-dev libzip-dev \
@@ -10,24 +11,31 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mbstring gd intl zip
 
-# install composer
-COPY --from=composer:2 /usr/bin/composer /usr/bin/composer
+# ติดตั้ง Composer
+RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
 
-# copy project files first
+# คัดลอกไฟล์จากโปรเจคเข้าใน container
 COPY . .
 
-# install dependencies
+# ติดตั้ง dependencies ของ Laravel
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
-# set proper permissions BEFORE changing user
+# ตั้งค่าการอนุญาตให้โฟลเดอร์ที่ใช้โดย Laravel
 RUN chown -R www-data:www-data /var/www/html \
  && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
 
-# change user to www-data
+# คัดลอก entrypoint script ที่จะรัน migrate ก่อนเริ่ม Laravel
+COPY entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# เปลี่ยนผู้ใช้เป็น www-data
 USER www-data
 
-# expose Laravel default port
-EXPOSE 10000
+# เปิด port 9000 สำหรับ PHP-FPM
+EXPOSE 9000
 
-# run Laravel
-CMD ["php","artisan","serve","--host=0.0.0.0","--port=10000"]
+# รัน entrypoint script ตอนเริ่มต้น container
+ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]
+
+# รัน PHP-FPM
+CMD ["php-fpm"]
