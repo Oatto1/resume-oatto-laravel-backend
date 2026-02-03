@@ -29,7 +29,7 @@ COPY . .
 # ติดตั้ง PHP dependencies ด้วย Composer
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
-# เปิด port 8000 ที่ใช้โดย php artisan serve
+# เปิด port 8000 ที่ใช้โดย php artisan serve 
 EXPOSE 8000
 
 # ติดตั้ง Node.js และ npm
@@ -38,6 +38,9 @@ RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
 
 # ติดตั้ง JavaScript dependencies ด้วย npm
 RUN npm install
+
+# Build assets ด้วย Vite
+RUN npm run build
 
 # รัน migrations และเริ่ม server
 CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
