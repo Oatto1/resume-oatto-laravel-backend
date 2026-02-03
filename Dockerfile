@@ -33,6 +33,13 @@ RUN composer install --no-dev --optimize-autoloader --prefer-dist
 RUN composer require filament/filament
 RUN composer require livewire/livewire
 
+# เคลียร์ cache ก่อน deploy
+RUN php artisan config:clear && \
+    php artisan route:clear && \
+    php artisan view:clear && \
+    php artisan cache:clear && \
+    php artisan optimize:clear
+
 # เปิด port 8000 ที่ใช้โดย php artisan serve
 EXPOSE 8000
 
