@@ -1,13 +1,12 @@
 FROM php:8.4-fpm
 
-# กำหนด working directory
 WORKDIR /var/www/html
 
-# ติดตั้ง dependencies ที่จำเป็น
+# ติดตั้ง dependencies ที่จำเป็นรวมถึง netcat
 RUN apt-get update && apt-get install -y \
     git unzip libpng-dev libjpeg-dev libfreetype6-dev \
     libonig-dev libxml2-dev zip curl libicu-dev libzip-dev \
-    && docker-php-ext-configure intl \
+    netcat && docker-php-ext-configure intl \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mbstring gd intl zip
 
