@@ -1,40 +1,42 @@
-FROM php:8.4-fpm
+FROM php:8.4-cli
 
-WORKDIR /var/www/html
-
-# ติดตั้ง dependencies ที่จำเป็นรวมถึง netcat
+# Install system dependencies
 RUN apt-get update && apt-get install -y \
-    git unzip libpng-dev libjpeg-dev libfreetype6-dev \
-    libonig-dev libxml2-dev zip curl libicu-dev libzip-dev \
-    netcat && docker-php-ext-configure intl \
+    git \
+    unzip \
+    curl \
+    zip \
+    libpng-dev \
+    libjpeg-dev \
+    libfreetype6-dev \
+    libonig-dev \
+    libxml2-dev \
+    libicu-dev \
+    libzip-dev \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mbstring gd intl zip
 
-# ติดตั้ง Composer
-RUN curl -sS https://getcomposer.org/installer | php -- --install-dir=/usr/local/bin --filename=composer
+# Get Composer (install PHP dependencies)
+COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# คัดลอกไฟล์จากโปรเจคเข้าใน container
+# Set working directory
+WORKDIR /var/www/html
+
+# Copy application files
 COPY . .
 
-# ติดตั้ง dependencies ของ Laravel
+# Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
-# ตั้งค่าการอนุญาตให้โฟลเดอร์ที่ใช้โดย Laravel
-RUN chown -R www-data:www-data /var/www/html \
- && chmod -R 775 /var/www/html/storage /var/www/html/bootstrap/cache
+# Expose port used by `php artisan serve`
+EXPOSE 8000
 
-# คัดลอก entrypoint script ที่จะรัน migrate ก่อนเริ่ม Laravel
-COPY entrypoint.sh /usr/local/bin/entrypoint.sh
-RUN chmod +x /usr/local/bin/entrypoint.sh
+# Install Node.js and npm
+RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
+    apt-get update && apt-get install -y nodejs
 
-# เปลี่ยนผู้ใช้เป็น www-data
-USER www-data
+# Install JS dependencies
+RUN npm install
 
-# เปิด port 9000 สำหรับ PHP-FPM
-EXPOSE 9000
-
-# รัน entrypoint script ตอนเริ่มต้น container
-ENTRYPOINT ["sh", "/usr/local/bin/entrypoint.sh"]
-
-# รัน PHP-FPM
-CMD ["php-fpm"]
+# Run migrations and start server
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
