@@ -1,6 +1,7 @@
-FROM php:8.4-fpm
+# ใช้ PHP 8.4 CLI image
+FROM php:8.4-cli
 
-# Install system dependencies
+# ติดตั้ง system dependencies
 RUN apt-get update && apt-get install -y \
     git \
     unzip \
@@ -16,33 +17,27 @@ RUN apt-get update && apt-get install -y \
     && docker-php-ext-configure gd --with-freetype --with-jpeg \
     && docker-php-ext-install pdo pdo_mysql mbstring gd intl zip
 
-# Get Composer (install PHP dependencies)
+# ติดตั้ง Composer (คัดลอกจาก image ของ Composer)
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Set working directory
+# กำหนด working directory
 WORKDIR /var/www/html
 
-# Copy application files
+# คัดลอกไฟล์โปรเจคทั้งหมดเข้าใน container
 COPY . .
 
-# Install PHP dependencies
+# ติดตั้ง PHP dependencies ด้วย Composer
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
-# Install Node.js and npm
+# เปิด port 8000 ที่ใช้โดย php artisan serve
+EXPOSE 8000
+
+# ติดตั้ง Node.js และ npm
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get update && apt-get install -y nodejs
 
-# Install JS dependencies
+# ติดตั้ง JavaScript dependencies ด้วย npm
 RUN npm install
 
-# Expose port 80 for Nginx
-EXPOSE 80
-
-# Install Nginx
-RUN apt-get install -y nginx
-
-# Copy Nginx config (Assuming you have nginx.conf in your project)
-COPY nginx.conf /etc/nginx/nginx.conf
-
-# Run migrations and start PHP-FPM with Nginx
-CMD php artisan migrate --force && service nginx start && php-fpm
+# รัน migrations และเริ่ม server
+CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
