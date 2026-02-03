@@ -52,7 +52,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://localhost'),
+    'url' => env('APP_URL', 'https://resume-oatto-render-production-6a5c.up.railway.app'),
 
     /*
     |--------------------------------------------------------------------------
