@@ -15,6 +15,7 @@ return Application::configure(basePath: dirname(__DIR__))
         $middleware->alias([
             'apikey' => \App\Http\Middleware\ApiKeyMiddleware::class,
         ]);
+        $middleware->trustProxies(at: '*'); // Trust all proxies
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
