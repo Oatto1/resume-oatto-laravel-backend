@@ -1,4 +1,4 @@
-FROM php:8.4-cli
+FROM php:8.4-fpm
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -28,9 +28,6 @@ COPY . .
 # Install PHP dependencies
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
-# Expose port used by `php artisan serve`
-EXPOSE 8000
-
 # Install Node.js and npm
 RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
     apt-get update && apt-get install -y nodejs
@@ -38,5 +35,14 @@ RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
 # Install JS dependencies
 RUN npm install
 
-# Run migrations and start server
-CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
+# Expose port 80 for Nginx
+EXPOSE 80
+
+# Install Nginx
+RUN apt-get install -y nginx
+
+# Copy Nginx config (Assuming you have nginx.conf in your project)
+COPY nginx.conf /etc/nginx/nginx.conf
+
+# Run migrations and start PHP-FPM with Nginx
+CMD php artisan migrate --force && service nginx start && php-fpm
