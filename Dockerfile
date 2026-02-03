@@ -36,9 +36,9 @@ RUN composer require livewire/livewire
 # เปิด port 8000 ที่ใช้โดย php artisan serve
 EXPOSE 8000
 
-# ติดตั้ง Node.js และ npm
-RUN curl -sL https://deb.nodesource.com/setup_18.x | bash - && \
-    apt-get update && apt-get install -y nodejs
+# ติดตั้ง Node.js เวอร์ชันที่รองรับ (20.x หรือ 22.x)
+RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs
 
 # ติดตั้ง JavaScript dependencies ด้วย npm
 RUN npm install
