@@ -21,9 +21,6 @@ COPY . .
 # ติดตั้ง dependencies สำหรับ Laravel
 RUN composer install --no-dev --optimize-autoloader --prefer-dist
 
-# สร้าง key สำหรับ Laravel application
-RUN php artisan key:generate
-
 # ทำการ migrate ฐานข้อมูล (โดยใช้ --force สำหรับ production)
 RUN php artisan migrate --force
 
