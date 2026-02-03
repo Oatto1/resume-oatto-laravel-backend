@@ -55,12 +55,5 @@ RUN php artisan filament:optimize
 # เคลียร์ cache ถ้าจำเป็น
 RUN php artisan filament:optimize-clear
 
-# เคลียร์ cache ก่อน deploy
-RUN php artisan config:clear && \
-    php artisan route:clear && \
-    php artisan view:clear && \
-    php artisan cache:clear && \
-    php artisan optimize:clear
-
 # รัน migrations และเริ่ม server
 CMD php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000
