@@ -43,6 +43,9 @@ RUN curl -sL https://deb.nodesource.com/setup_20.x | bash - && \
 # ติดตั้ง JavaScript dependencies ด้วย npm
 RUN npm install
 
+# Build assets ด้วย Vite
+RUN npm run build
+
 # รันคำสั่ง Filament optimize เพื่อเพิ่มประสิทธิภาพ
 RUN php artisan filament:optimize
 
