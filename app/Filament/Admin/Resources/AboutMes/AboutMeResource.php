@@ -39,6 +39,10 @@ class AboutMeResource extends Resource
         ];
     }
 
+    protected static ?string $navigationLabel = 'About Me';
+    protected static ?string $modelLabel = 'About Me';
+    protected static ?string $pluralModelLabel = 'About Me';
+
     public static function getPages(): array
     {
         return [

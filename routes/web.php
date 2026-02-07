@@ -6,17 +6,12 @@ use App\Http\Controllers\Api\AboutMeController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 
-Route::get('/', fn () => redirect('/login'));
+Route::get('/', fn () => redirect('/admin/login'));
 
-Route::get('/test-auth', function () {
-    dd(auth()->user());
-});
-
-require __DIR__.'/auth.php';
 
 Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+    return redirect('/admin');
+})->middleware(['auth'])->name('admin');;
 
 
 Route::middleware('auth')->group(function () {
@@ -37,3 +32,5 @@ Route::post('/admin/ckeditor/upload', function (Request $request) {
 
     return response()->json(['error' => 'No file uploaded'], 400);
 });
+
+require __DIR__.'/auth.php';

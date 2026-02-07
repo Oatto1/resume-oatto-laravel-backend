@@ -46,6 +46,10 @@ class PortfolioResource extends Resource
         ];
     }
 
+    protected static ?string $navigationLabel = 'Portfolio';
+    protected static ?string $modelLabel = 'Portfolio';
+    protected static ?string $pluralModelLabel = 'Portfolio';
+
     public static function getPages(): array
     {
         return [

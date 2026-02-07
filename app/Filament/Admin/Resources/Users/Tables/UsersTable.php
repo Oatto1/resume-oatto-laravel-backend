@@ -53,9 +53,6 @@ class UsersTable
 
                 // ✏️ Edit = เฉพาะ super-admin
                 EditAction::make()
-                    ->visible(fn () =>
-                        auth()->user()->hasRole('super-admin')
-                    ),
             ])
 
             // ===== ปุ่มด้านบน (bulk) =====

@@ -24,9 +24,9 @@ class User extends Authenticatable implements FilamentUser
     // ✅ Filament ใช้อันนี้ตัดสิน 403 / 200
     public function canAccessPanel(Panel $panel): bool
     {
-        // return true;
+        return true;
         // หรือจริงจัง:
-        return $this->hasRole('super-admin');
+        // return $this->hasRole('super-admin');
     }
 
     protected $hidden = [
@@ -40,5 +40,12 @@ class User extends Authenticatable implements FilamentUser
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
         ];
+    }
+
+    protected static function booted()
+    {
+        static::created(function ($user) {
+            $user->assignRole('viewer');
+        });
     }
 }

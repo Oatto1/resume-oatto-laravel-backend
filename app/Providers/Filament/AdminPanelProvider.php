@@ -26,6 +26,8 @@ class AdminPanelProvider extends PanelProvider
         return $panel
             ->id('admin')
             ->path('admin')
+            ->brandName('Resume Oatto')
+            ->globalSearch(false)
             ->login()
             ->colors([
                 'primary' => Color::Amber,

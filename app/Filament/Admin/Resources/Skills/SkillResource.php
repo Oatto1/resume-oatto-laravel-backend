@@ -39,6 +39,10 @@ class SkillResource extends Resource
         ];
     }
 
+    protected static ?string $navigationLabel = 'Skill';
+    protected static ?string $modelLabel = 'Skill';
+    protected static ?string $pluralModelLabel = 'Skill';
+
     public static function getPages(): array
     {
         return [
