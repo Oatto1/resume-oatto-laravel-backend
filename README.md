@@ -41,6 +41,13 @@ The system allows managing portfolio data from an Admin Panel and delivering it 
 
 ---
 
+## Deployment
+
+* Backend deployed using Railway
+* Used for hosting Laravel API and Database in production environment
+
+---
+
 ## Purpose
 
 Built as a **Case Study project**:
