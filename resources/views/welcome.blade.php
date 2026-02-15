@@ -206,7 +206,7 @@
                 <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">{{ __('Experience') }} & {{ __('Education') }}</p>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12">
+            <div class="grid grid-cols-1 gap-12">
                 <!-- Experience Column -->
                 <div class="space-y-8">
                     <div class="flex items-center space-x-4 mb-6">
@@ -218,7 +218,7 @@
 
                     @forelse($experiences as $experience)
                     <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-purple-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 duration-500"></div>
+                        <div class="absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 duration-500"></div>
                         
                             <!-- 3-Column Layout: Image - Content - Year -->
                             <div class="flex flex-col md:flex-row gap-4 md:gap-6 w-full">
@@ -264,7 +264,7 @@
 
                     @forelse($educations as $education)
                     <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 bg-blue-50 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 duration-500"></div>
+                        <div class="absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 duration-500"></div>
                         
                         <div class="relative z-10">
                             <div class="flex gap-4 mb-4">
