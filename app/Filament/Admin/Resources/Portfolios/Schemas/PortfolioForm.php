@@ -9,7 +9,9 @@ use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\Field;
 use Filament\Forms\Components\Repeater;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Utilities\Get;
+use Filament\Forms\Components\TagsInput;
 use App\Helpers\ImageHelper;
 
 class PortfolioForm
@@ -17,46 +19,59 @@ class PortfolioForm
     public static function configure(Schema $schema): Schema
     {
         return $schema->schema([
-            TextInput::make('title')
-                ->label('Project Name')
+            Section::make('🇬🇧 English')
+            ->schema([
+                TextInput::make('title')
+                ->label('Project Name (EN)')
                 ->required(),
+                Textarea::make('description')
+                ->label('Description (EN)'),
+            ]),
+
+            Section::make('🇹🇭 ภาษาไทย')
+            ->schema([
+                TextInput::make('title_th')
+                ->label('ชื่อโปรเจกต์ (TH)'),
+                Textarea::make('description_th')
+                ->label('คำอธิบาย (TH)'),
+            ])
+            ->collapsible(),
 
             TextInput::make('subtitle')
-                ->label('Category')
-                ->required(),
+            ->label('Category')
+            ->required(),
 
             Select::make('type')
-                ->options([
-                    'app' => 'Mobile App',
-                    'website' => 'Website',
-                ])
-                ->reactive()
-                ->required(),
+            ->options([
+                'app' => 'Application', // Changed from 'Mobile App'
+                'website' => 'Website',
+            ])
+            // ->reactive() // Removed reactive()
+            ->required(),
 
-            TextInput::make('tech_stack')
-                ->label('Tech Stack')
-                ->placeholder('Flutter, Laravel')
-                ->required(),
+            TagsInput::make('tech_stack') // Replaced TextInput with TagsInput
+            ->required()
+            ->columnSpanFull(),
 
             FileUpload::make('image')
-                ->image()
-                ->directory('portfolios')
-                ->required(),
+            ->image()
+            ->directory('portfolios')
+            ->required(),
 
             TextInput::make('link')
-                ->label('Project Link')
-                ->url(),
+            ->label('Project Link')
+            ->url(),
 
-             FileUpload::make('images')
-                ->multiple()
-                ->image()
-                ->disk('public')
-                ->directory('portfolios')
-                ->saveUploadedFileUsing(fn ($file) =>
-                    ImageHelper::convertToWebpSharp($file, 'portfolios')
-                )
-                ->columnSpanFull()
-                ->visible(fn (Get $get) => $get('type') === 'app')
+            FileUpload::make('images')
+            ->multiple()
+            ->image()
+            ->disk('public')
+            ->directory('portfolios')
+            ->saveUploadedFileUsing(fn($file) =>
+        ImageHelper::convertToWebpSharp($file, 'portfolios')
+        )
+            ->columnSpanFull()
+            ->visible(fn(Get $get) => $get('type') === 'app')
         ]);
     }
 }

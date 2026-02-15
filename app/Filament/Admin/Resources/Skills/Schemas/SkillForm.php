@@ -14,13 +14,16 @@ class SkillForm
     {
         return $schema->schema([
             TextInput::make('title')
-                ->label('Skill Name')
-                ->required(),
+            ->label('Skill Name (EN)')
+            ->required(),
+
+            TextInput::make('title_th')
+            ->label('ชื่อทักษะ (TH)'),
 
             FileUpload::make('image')
-                ->image()
-                ->directory('skills')
-                ->required(),
+            ->image()
+            ->directory('skills')
+            ->required(),
         ]);
     }
 }

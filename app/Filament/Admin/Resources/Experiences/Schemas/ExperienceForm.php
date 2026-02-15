@@ -7,6 +7,7 @@ use Filament\Forms\Components\TextInput;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Textarea;
+use Filament\Schemas\Components\Section;
 
 class ExperienceForm
 {
@@ -14,17 +15,28 @@ class ExperienceForm
     {
         return $schema
             ->components([
-                FileUpload::make('image')
-                ->image()
-                ->directory('experiences')
-                ->required(),
-                TextInput::make('company')->required(),
-                TextInput::make('position')->required(),
+            FileUpload::make('image')
+            ->image()
+            ->directory('experiences')
+            ->required(),
 
-                TextInput::make('start_year')->required(),
-                TextInput::make('end_year')->placeholder('Now'),
+            Section::make('🇬🇧 English')
+            ->schema([
+                TextInput::make('company')->label('Company (EN)')->required(),
+                TextInput::make('position')->label('Position (EN)')->required(),
+                Textarea::make('description')->label('Description (EN)')->rows(3),
+            ]),
 
-                Textarea::make('description')->rows(3),
-            ]);
+            Section::make('🇹🇭 ภาษาไทย')
+            ->schema([
+                TextInput::make('company_th')->label('บริษัท (TH)'),
+                TextInput::make('position_th')->label('ตำแหน่ง (TH)'),
+                Textarea::make('description_th')->label('คำอธิบาย (TH)')->rows(3),
+            ])
+            ->collapsible(),
+
+            TextInput::make('start_year')->required(),
+            TextInput::make('end_year')->placeholder('Now'),
+        ]);
     }
 }

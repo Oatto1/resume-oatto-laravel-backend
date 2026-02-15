@@ -16,6 +16,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'apikey' => \App\Http\Middleware\ApiKeyMiddleware::class,
         ]);
         $middleware->trustProxies(at: '*'); // Trust all proxies
+        $middleware->web(append: [
+            \App\Http\Middleware\SetLocale::class,
+        ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {
         //
