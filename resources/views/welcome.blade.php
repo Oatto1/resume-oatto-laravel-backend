@@ -357,7 +357,7 @@
                                     @endphp
                                     @if(is_array($techStack))
                                         @foreach($techStack as $tech)
-                                            <span class="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-md font-medium">{{ trim($tech) }}</span>
+                                            <span class="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-md font-medium">{{ trim($tech) }}</span> 
                                         @endforeach
                                     @endif
                                 @endif
