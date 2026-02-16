@@ -7,7 +7,7 @@ use Intervention\Image\Drivers\Gd\Driver;
 use Intervention\Image\Encoders\WebpEncoder;
 use Illuminate\Support\Str;
 
-class ImageHelper
+class ImageHelper1
 {
     public static function smartResizeAndStore($file, string $dir): string
     {
