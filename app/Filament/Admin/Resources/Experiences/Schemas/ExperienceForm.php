@@ -20,7 +20,7 @@ class ExperienceForm
             ->directory('experiences')
             ->required(),
 
-            Section::make('🇬🇧 English')
+            Section::make('EN English')
             ->schema([
                 TextInput::make('company')->label('Company (EN)')->required(),
                 TextInput::make('position')->label('Position (EN)')->required(),

@@ -20,7 +20,7 @@ class EducationForm
             ->directory('education')
             ->required(),
 
-            Section::make('🇬🇧 English')
+            Section::make('EN English')
             ->schema([
                 TextInput::make('school')->label('School (EN)')->required(),
                 TextInput::make('degree')->label('Degree (EN)')->required(),

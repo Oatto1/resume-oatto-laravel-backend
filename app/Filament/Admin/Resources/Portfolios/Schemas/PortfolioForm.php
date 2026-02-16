@@ -19,7 +19,7 @@ class PortfolioForm
     public static function configure(Schema $schema): Schema
     {
         return $schema->schema([
-            Section::make('🇬🇧 English')
+            Section::make('EN English')
             ->schema([
                 TextInput::make('title')
                 ->label('Project Name (EN)')

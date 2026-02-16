@@ -36,6 +36,24 @@
     @endif
     
     <style>
+        /* Force list styles for RichEditor content */
+        .prose ul {
+            list-style-type: disc !important;
+            padding-left: 1.5em !important;
+            margin-top: 1em !important;
+            margin-bottom: 1em !important;
+        }
+        .prose ol {
+            list-style-type: decimal !important;
+            padding-left: 1.5em !important;
+            margin-top: 1em !important;
+            margin-bottom: 1em !important;
+        }
+        .prose li {
+            margin-top: 0.5em !important;
+            margin-bottom: 0.5em !important;
+        }
+
         .fade-enter-active, .fade-leave-active {
             transition: opacity 0.5s;
         }
@@ -163,7 +181,7 @@
             <div class="max-w-4xl mx-auto">
                 <div class="bg-gradient-to-br from-purple-50 to-blue-50 rounded-2xl p-8 md:p-12 shadow-sm border border-purple-100/50">
                     <div class="prose prose-lg max-w-none text-gray-700 leading-relaxed">
-                        {!! nl2br(e($aboutMe->localized('description'))) !!}
+                        {!! $aboutMe->localized('description') !!}
                     </div>
                 </div>
             </div>
@@ -180,26 +198,28 @@
             </div>
             
             <div class="grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-8">
-                @forelse($skills as $skill)
-                <div class="flex flex-col items-center p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1">
-                    <div class="h-16 w-16 mb-4 flex items-center justify-center bg-white rounded-full shadow-sm p-3">
-                        @if($skill->image)
-                            <img src="{{ asset('storage/' . $skill->image) }}" alt="{{ $skill->localized('title') }}" class="h-10 w-10 object-contain">
-                        @else
-                            <span class="text-2xl font-bold text-purple-600">{{ substr($skill->localized('title'), 0, 1) }}</span>
-                        @endif
+                @if(count($skills) > 0)
+                    @foreach($skills as $skill)
+                    <div class="flex flex-col items-center p-6 bg-gray-50 rounded-xl hover:shadow-lg transition-shadow duration-300 transform hover:-translate-y-1">
+                        <div class="h-16 w-16 mb-4 flex items-center justify-center bg-white rounded-full shadow-sm p-3">
+                            @if($skill->image)
+                                <img src="{{ asset('storage/' . $skill->image) }}" alt="{{ $skill->localized('title') }}" class="h-10 w-10 object-contain">
+                            @else
+                                <span class="text-2xl font-bold text-purple-600">{{ substr($skill->localized('title'), 0, 1) }}</span>
+                            @endif
+                        </div>
+                        <h3 class="text-lg font-medium text-gray-900">{{ $skill->localized('title') }}</h3>
                     </div>
-                    <h3 class="text-lg font-medium text-gray-900">{{ $skill->localized('title') }}</h3>
-                </div>
-                @empty
-                <div class="col-span-full text-center text-gray-500">{{ __('No skills found.') }}</div>
-                @endforelse
+                    @endforeach
+                @else
+                    <div class="col-span-full text-center text-gray-500">{{ __('No skills found.') }}</div>
+                @endif
             </div>
         </div>
     </section>
 
     <!-- Experience & Education Section -->
-    <section id="experience-education" class="py-20 bg-gray-50">
+    <section class="py-20 bg-gray-50">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
             <div class="text-center mb-16">
                 <h2 class="text-base text-purple-600 font-semibold tracking-wide uppercase">{{ __('Career Path') }} & {{ __('Learning') }}</h2>
@@ -208,7 +228,7 @@
 
             <div class="grid grid-cols-1 gap-12">
                 <!-- Experience Column -->
-                <div class="space-y-8">
+                <div id="experience" class="space-y-8">
                     <div class="flex items-center space-x-4 mb-6">
                         <div class="p-3 bg-purple-100 rounded-lg text-purple-600">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
@@ -216,45 +236,47 @@
                         <h3 class="text-2xl font-bold text-gray-900">{{ __('Work Experience') }}</h3>
                     </div>
 
-                    @forelse($experiences as $experience)
-                    <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 duration-500"></div>
-                        
-                            <!-- 3-Column Layout: Image - Content - Year -->
-                            <div class="flex flex-col md:flex-row gap-4 md:gap-6 w-full">
-                                <!-- 1. Image Column (Left) -->
-                                <div class="flex-shrink-0">
-                                    @if($experience->image)
-                                        <img src="{{ asset('storage/' . $experience->image) }}" alt="{{ $experience->localized('company') }}" class="h-16 w-16 rounded-xl object-contain shadow-sm bg-white p-1 border border-gray-100">
-                                    @else
-                                        <div class="h-16 w-16 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
-                                        </div>
-                                    @endif
-                                </div>
+                    @if(count($experiences) > 0)
+                        @foreach($experiences as $experience)
+                        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 duration-500"></div>
+                            
+                                <!-- 3-Column Layout: Image - Content - Year -->
+                                <div class="flex flex-col md:flex-row gap-4 md:gap-6 w-full">
+                                    <!-- 1. Image Column (Left) -->
+                                    <div class="flex-shrink-0">
+                                        @if($experience->image)
+                                            <img src="{{ asset('storage/' . $experience->image) }}" alt="{{ $experience->localized('company') }}" class="h-16 w-16 rounded-xl object-contain shadow-sm bg-white p-1 border border-gray-100">
+                                        @else
+                                            <div class="h-16 w-16 rounded-xl bg-purple-100 flex items-center justify-center text-purple-600">
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 13.255A23.931 23.931 0 0112 15c-3.183 0-6.22-.62-9-1.745M16 6V4a2 2 0 00-2-2h-4a2 2 0 00-2 2v2m4 6h.01M5 20h14a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                                            </div>
+                                        @endif
+                                    </div>
 
-                                <!-- 2. Content Column (Middle - Grows) -->
-                                <div class="flex-grow min-w-0">
-                                    <h4 class="text-xl font-bold text-gray-900 break-words">{{ $experience->localized('position') }}</h4>
-                                    <p class="text-lg font-medium text-purple-600 break-words mb-2">{{ $experience->localized('company') }}</p>
-                                    <p class="text-gray-600 leading-relaxed">{{ $experience->localized('description') }}</p>
-                                </div>
+                                    <!-- 2. Content Column (Middle - Grows) -->
+                                    <div class="flex-grow min-w-0">
+                                        <h4 class="text-xl font-bold text-gray-900 break-words">{{ $experience->localized('position') }}</h4>
+                                        <p class="text-lg font-medium text-purple-600 break-words mb-2">{{ $experience->localized('company') }}</p>
+                                        <p class="text-gray-600 leading-relaxed">{{ $experience->localized('description') }}</p>
+                                    </div>
 
-                                <!-- 3. Year Column (Right - Pushed to End) -->
-                                <div class="flex-shrink-0 self-start md:ml-auto">
-                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-50 text-purple-700 whitespace-nowrap border border-purple-100">
-                                        {{ $experience->start_year }} - {{ $experience->end_year ?? __('Present') }}
-                                    </span>
+                                    <!-- 3. Year Column (Right - Pushed to End) -->
+                                    <div class="flex-shrink-0 self-start md:ml-auto">
+                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-purple-50 text-purple-700 whitespace-nowrap border border-purple-100">
+                                            {{ $experience->start_year }} - {{ $experience->end_year ?? __('Present') }}
+                                        </span>
+                                    </div>
                                 </div>
-                            </div>
-                    </div>
-                    @empty
-                    <div class="text-gray-500 italic">{{ __('No experience listed.') }}</div>
-                    @endforelse
+                        </div>
+                        @endforeach
+                    @else
+                        <div class="text-gray-500 italic">{{ __('No experience listed.') }}</div>
+                    @endif
                 </div>
 
                 <!-- Education Column -->
-                <div class="space-y-8">
+                <div id="education" class="space-y-8">
                     <div class="flex items-center space-x-4 mb-6">
                         <div class="p-3 bg-blue-100 rounded-lg text-blue-600">
                             <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l9-5-9-5-9 5 9 5zm0 0l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14zm-4 6v-7.5l4-2.222"></path></svg>
@@ -262,41 +284,43 @@
                         <h3 class="text-2xl font-bold text-gray-900">{{ __('Education') }}</h3>
                     </div>
 
-                    @forelse($educations as $education)
-                    <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 relative overflow-hidden group">
-                        <div class="absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 duration-500"></div>
-                        
-                        <div class="relative z-10">
-                            <div class="flex gap-4 mb-4">
-                                <div class="flex-shrink-0">
-                                    @if($education->image)
-                                        <img src="{{ asset('storage/' . $education->image) }}" alt="{{ $education->localized('school') }}" class="h-16 w-16 rounded-xl object-cover shadow-sm">
-                                    @else
-                                        <div class="h-16 w-16 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400">
-                                            <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
-                                        </div>
+                    @if(count($educations) > 0)
+                        @foreach($educations as $education)
+                        <div class="bg-white rounded-2xl p-8 shadow-sm border border-gray-100 hover:shadow-md transition-shadow duration-300 relative overflow-hidden group">
+                            <div class="absolute top-0 right-0 w-24 h-24 rounded-bl-full -mr-4 -mt-4 transition-transform group-hover:scale-110 duration-500"></div>
+                            
+                            <div class="relative z-10">
+                                <div class="flex gap-4 mb-4">
+                                    <div class="flex-shrink-0">
+                                        @if($education->image)
+                                            <img src="{{ asset('storage/' . $education->image) }}" alt="{{ $education->localized('school') }}" class="h-16 w-16 rounded-xl object-cover shadow-sm">
+                                        @else
+                                            <div class="h-16 w-16 rounded-xl bg-gray-100 flex items-center justify-center text-gray-400">
+                                                <svg class="w-8 h-8" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"></path></svg>
+                                            </div>
+                                        @endif
+                                    </div>
+                                    <div>
+                                        <h4 class="text-xl font-bold text-gray-900">{{ $education->localized('school') }}</h4>
+                                        <p class="text-lg font-medium text-blue-600">{{ $education->localized('degree') }}</p>
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between text-sm text-gray-500 mt-4 pt-4 border-t border-gray-100">
+                                    <div class="flex items-center">
+                                        <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                                        {{ $education->start_year }} - {{ $education->end_year }}
+                                    </div>
+                                    @if($education->gpa)
+                                    <div class="font-medium bg-blue-50 text-blue-700 px-2 py-1 rounded">GPA: {{ $education->gpa }}</div>
                                     @endif
                                 </div>
-                                <div>
-                                    <h4 class="text-xl font-bold text-gray-900">{{ $education->localized('school') }}</h4>
-                                    <p class="text-lg font-medium text-blue-600">{{ $education->localized('degree') }}</p>
-                                </div>
-                            </div>
-
-                            <div class="flex items-center justify-between text-sm text-gray-500 mt-4 pt-4 border-t border-gray-100">
-                                <div class="flex items-center">
-                                    <svg class="w-4 h-4 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
-                                    {{ $education->start_year }} - {{ $education->end_year }}
-                                </div>
-                                @if($education->gpa)
-                                <div class="font-medium bg-blue-50 text-blue-700 px-2 py-1 rounded">GPA: {{ $education->gpa }}</div>
-                                @endif
                             </div>
                         </div>
-                    </div>
-                    @empty
-                    <div class="text-gray-500 italic">{{ __('No education listed.') }}</div>
-                    @endforelse
+                        @endforeach
+                    @else
+                        <div class="text-gray-500 italic">{{ __('No education listed.') }}</div>
+                    @endif
                 </div>
             </div>
         </div>
@@ -311,43 +335,45 @@
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                @forelse($portfolios as $portfolio)
-                <div class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                    <div class="relative h-48 w-full overflow-hidden">
-                        <img src="{{ isset($portfolio->image) ? asset('storage/' . $portfolio->image) : 'https://placehold.co/600x400/purple/white?text=Project' }}" alt="{{ $portfolio->localized('title') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
-                        <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
-                            <span class="text-white font-medium">{{ $portfolio->type ?? 'Web App' }}</span>
+                @if(count($portfolios) > 0)
+                    @foreach($portfolios as $portfolio)
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
+                        <div class="relative h-48 w-full overflow-hidden">
+                            <img src="{{ isset($portfolio->image) ? asset('storage/' . $portfolio->image) : 'https://placehold.co/600x400/purple/white?text=Project' }}" alt="{{ $portfolio->localized('title') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
+                                <span class="text-white font-medium">{{ $portfolio->type ?? 'Web App' }}</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="p-6">
-                        <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">{{ $portfolio->localized('title') }}</h3>
-                        <p class="text-gray-500 text-sm mb-4 line-clamp-2">{{ $portfolio->localized('description') }}</p>
-                        <div class="flex flex-wrap gap-2 mb-4">
-                            @if(isset($portfolio->tech_stack))
-                                @php
-                                    $techStack = $portfolio->tech_stack;
-                                    if (is_string($techStack)) {
-                                        $techStack = explode(',', $techStack);
-                                    }
-                                @endphp
-                                @if(is_array($techStack))
-                                    @foreach($techStack as $tech)
-                                        <span class="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-md font-medium">{{ trim($tech) }}</span>
-                                    @endforeach
+                        <div class="p-6">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">{{ $portfolio->localized('title') }}</h3>
+                            <p class="text-gray-500 text-sm mb-4 line-clamp-2">{{ $portfolio->localized('description') }}</p>
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                @if(isset($portfolio->tech_stack))
+                                    @php
+                                        $techStack = $portfolio->tech_stack;
+                                        if (is_string($techStack)) {
+                                            $techStack = explode(',', $techStack);
+                                        }
+                                    @endphp
+                                    @if(is_array($techStack))
+                                        @foreach($techStack as $tech)
+                                            <span class="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-md font-medium">{{ trim($tech) }}</span>
+                                        @endforeach
+                                    @endif
                                 @endif
+                            </div>
+                            @if($portfolio->link)
+                            <a href="{{ $portfolio->link }}" target="_blank" class="inline-flex items-center text-sm font-semibold text-purple-600 hover:text-purple-800 transition-colors">
+                                {{ __('View Project') }}
+                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </a>
                             @endif
                         </div>
-                        @if($portfolio->link)
-                        <a href="{{ $portfolio->link }}" target="_blank" class="inline-flex items-center text-sm font-semibold text-purple-600 hover:text-purple-800 transition-colors">
-                            {{ __('View Project') }}
-                            <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
-                        </a>
-                        @endif
                     </div>
-                </div>
-                @empty
-                <div class="col-span-full text-center text-gray-500">{{ __('Coming soon.') }}</div>
-                @endforelse
+                    @endforeach
+                @else
+                    <div class="col-span-full text-center text-gray-500">{{ __('Coming soon.') }}</div>
+                @endif
             </div>
         </div>
     </section>

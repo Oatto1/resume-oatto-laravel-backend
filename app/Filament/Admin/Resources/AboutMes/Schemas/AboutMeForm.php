@@ -9,6 +9,7 @@ use Filament\Forms\Components\Repeater;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\FileUpload;
 use Filament\Schemas\Components\Section;
+use Filament\Forms\Components\RichEditor;
 
 class AboutMeForm
 {
@@ -25,11 +26,11 @@ class AboutMeForm
             ->columnSpanFull(),
 
             // ===== English =====
-            Section::make('🇬🇧 English')
+            Section::make('EN English')
             ->schema([
                 TextInput::make('name')->label('Name (EN)')->required(),
                 TextInput::make('position')->label('Position (EN)')->required(),
-                Textarea::make('description')->label('Description (EN)')->rows(5)->columnSpanFull(),
+                RichEditor::make('description')->label('Description (EN)')->columnSpanFull(),
             ])
             ->columns(2)
             ->columnSpanFull(),
@@ -39,7 +40,7 @@ class AboutMeForm
             ->schema([
                 TextInput::make('name_th')->label('ชื่อ (TH)'),
                 TextInput::make('position_th')->label('ตำแหน่ง (TH)'),
-                Textarea::make('description_th')->label('คำอธิบาย (TH)')->rows(5)->columnSpanFull(),
+                RichEditor::make('description_th')->label('คำอธิบาย (TH)')->columnSpanFull(),
             ])
             ->columns(2)
             ->columnSpanFull()
