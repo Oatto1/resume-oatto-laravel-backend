@@ -338,8 +338,13 @@
                 @if(count($portfolios) > 0)
                     @foreach($portfolios as $portfolio)
                     <div class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                        <div class="relative h-48 w-full overflow-hidden">
-                            <img src="{{ isset($portfolio->image) ? asset('storage/' . $portfolio->image) : 'https://placehold.co/600x400/purple/white?text=Project' }}" alt="{{ $portfolio->localized('title') }}" class="w-full h-full object-cover transform group-hover:scale-110 transition-transform duration-500">
+                        <div class="relative h-48 w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                            <img
+                                src="{{ isset($portfolio->image) ? asset('storage/' . $portfolio->image) : 'https://placehold.co/600x400/purple/white?text=Project' }}"
+                                alt="{{ $portfolio->localized('title') }}"
+                                class="max-h-full max-w-full object-contain transform group-hover:scale-105 transition-transform duration-500"
+                            >
+
                             <div class="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-4">
                                 <span class="text-white font-medium">{{ $portfolio->type ?? 'Web App' }}</span>
                             </div>
