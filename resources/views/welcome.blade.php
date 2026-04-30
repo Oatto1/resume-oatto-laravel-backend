@@ -334,11 +334,11 @@
                 <p class="mt-2 text-3xl leading-8 font-extrabold tracking-tight text-gray-900 sm:text-4xl">{{ __('Recent Projects') }}</p>
             </div>
 
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" style="grid-auto-rows: 1fr;">
                 @if(count($portfolios) > 0)
                     @foreach($portfolios as $portfolio)
-                    <div class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group">
-                        <div class="relative h-48 w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center">
+                    <div class="bg-white rounded-xl shadow-sm hover:shadow-xl transition-all duration-300 overflow-hidden group flex flex-col" style="height: 100%;">
+                        <div class="relative h-48 w-full overflow-hidden bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center shrink-0">
                             <img
                                 src="{{ isset($portfolio->image) ? asset('storage/' . $portfolio->image) : 'https://placehold.co/600x400/purple/white?text=Project' }}"
                                 alt="{{ $portfolio->localized('title') }}"
@@ -349,10 +349,10 @@
                                 <span class="text-white font-medium">{{ $portfolio->type ?? 'Web App' }}</span>
                             </div>
                         </div>
-                        <div class="p-6">
+                        <div class="p-6 flex-grow flex flex-col">
                             <h3 class="text-xl font-bold text-gray-900 mb-2 group-hover:text-purple-600 transition-colors">{{ $portfolio->localized('title') }}</h3>
                             <p class="text-gray-500 text-sm mb-4 line-clamp-2">{{ $portfolio->localized('description') }}</p>
-                            <div class="flex flex-wrap gap-2 mb-4">
+                            <div class="flex flex-wrap gap-2">
                                 @if(isset($portfolio->tech_stack))
                                     @php
                                         $techStack = $portfolio->tech_stack;
@@ -362,15 +362,28 @@
                                     @endphp
                                     @if(is_array($techStack))
                                         @foreach($techStack as $tech)
-                                            <span class="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-md font-medium">{{ trim($tech) }}</span> 
+                                            <span class="px-2 py-1 bg-purple-50 text-purple-700 text-xs rounded-md font-medium border border-purple-100">{{ trim($tech) }}</span>
                                         @endforeach
                                     @endif
                                 @endif
                             </div>
+                        </div>
+
+                        {{-- Card Footer --}}
+                        <div class="px-6 py-4 border-t border-gray-100 flex items-center gap-4">
                             @if($portfolio->link)
-                            <a href="{{ $portfolio->link }}" target="_blank" class="inline-flex items-center text-sm font-semibold text-purple-600 hover:text-purple-800 transition-colors">
+                            <a href="{{ $portfolio->link }}" target="_blank" class="inline-flex items-center text-sm font-semibold text-purple-600 hover:text-purple-800 transition-colors group/link">
                                 {{ __('View Project') }}
-                                <svg class="w-4 h-4 ml-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                                <svg class="w-4 h-4 ml-1 transform group-hover/link:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"></path></svg>
+                            </a>
+                            @endif
+
+                            @if($portfolio->youtube_url)
+                            <a href="{{ $portfolio->youtube_url }}" target="_blank" class="inline-flex items-center text-sm font-semibold text-red-600 hover:text-red-700 transition-colors group/yt">
+                                <div class="p-1 bg-red-50 rounded-full group-hover/yt:bg-red-100 transition-colors mr-1.5">
+                                    <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                                </div>
+                                Demo
                             </a>
                             @endif
                         </div>
