@@ -28,7 +28,7 @@ class EditPortfolio extends EditRecord
         $state = $this->form->getState();
 
         // ถ้า field images ไม่ถูกแตะเลย → ไม่ต้องทำอะไร
-        if (! array_key_exists('images', $state)) {
+        if (!array_key_exists('images', $state)) {
             return;
         }
 

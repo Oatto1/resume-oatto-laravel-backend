@@ -17,6 +17,7 @@ class Portfolio extends Model
         'tech_stack',
         'image',
         'link',
+        'youtube_url',
         'description',
         'description_th',
     ];
